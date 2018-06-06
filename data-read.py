@@ -1,5 +1,12 @@
-import csv
-dict = []
+import csv, os
+from pymongo import MongoClient
+
+#mongo setup
+client = MongoClient('10.7.40.54',27017)
+db = client.eleicoes
+collection = db.resultados2014
+
+
 header = ['DATA_GERACAO',
 'HORA_GERACAO',
 'ANO_ELEICAO',
@@ -30,9 +37,19 @@ header = ['DATA_GERACAO',
 'COMPOSICAO_LEGENDA',
 'TOTAL_VOTOS']
 
-reader = csv.DictReader(open('dataset/votacao_candidato_munzona_2014_AC.utf8.converted','r'),fieldnames=header, delimiter=';')
-for line in reader:
-  dict.append(line)
+
+for filename in os.listdir('dataset/votacao'):
+  arquivo = (open('dataset/votacao/' + filename,'r'))  
+  
+  reader = csv.DictReader(arquivo,fieldnames=header, delimiter=';')
+  for line in reader:    
+    del line[None]
+    collection.insert_one(line)
+    
+  arquivo.close()
+  
+  
+  
 
 
-print(dict[0])
+
