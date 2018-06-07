@@ -23,7 +23,6 @@ for filename in os.listdir('dataset/eleitores'):
 
   reader = csv.DictReader(arquivo,fieldnames=header, delimiter=';')
   for line in reader:
-    del line[None]
     collection.insert_one(line)
 
   arquivo.close()
