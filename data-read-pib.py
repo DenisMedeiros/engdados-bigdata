@@ -12,7 +12,6 @@ for filename in os.listdir('dataset/pib'):
 
   reader = csv.DictReader(arquivo, delimiter=';')
   for line in reader:
-    del line[None]
-    collection.insert_one(line)
+    collection.insert_many(line)
 
   arquivo.close()
