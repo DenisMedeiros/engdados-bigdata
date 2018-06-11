@@ -1,4 +1,4 @@
-import csv, os
+import csv, os,json
 from pymongo import MongoClient
 
 #mongo setup
@@ -6,12 +6,11 @@ client = MongoClient('10.7.40.54',27017)
 db = client.eleicoes
 collection = db.pib2014
 
-
-for filename in os.listdir('dataset/pib'):
-  arquivo = (open('dataset/pib/' + filename,'r'))
-
-  reader = csv.DictReader(arquivo, delimiter=';')
-  for line in reader:
-    collection.insert_many(line)
-
-  arquivo.close()
+header = ['valor','municipio','ano']
+arquivo = open('dataset/pib/pib.json','rb')
+reader = csv.DictReader(arquivo,fieldnames=header,delimiter=',')
+for line in reader:
+    if None in line:
+        del line[None]
+    collection.insert_one(line)
+arquivo.close()
