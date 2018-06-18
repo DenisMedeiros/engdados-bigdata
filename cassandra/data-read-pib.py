@@ -11,7 +11,6 @@ for line in reader:
     if None in line:
         del line[None]
  
-    ''''
     session.execute(
         """
         INSERT INTO pibs (ID, VALOR, MUNICIPIO, ANO)
@@ -19,7 +18,6 @@ for line in reader:
         """,
         (int(line['VALOR']), int(line['MUNICIPIO']), int(line['ANO']))
     )
-    '''
 
 arquivo.close()
 session.shutdown()
