@@ -4,7 +4,7 @@ from pymongo import MongoClient
 #mongo setup
 client = MongoClient('10.7.40.54',27017)
 db = client.eleicoes
-collection = db.eleitores2014
+collection = db.eleitores
 
 
 header = ['PERIODO',
@@ -18,11 +18,12 @@ header = ['PERIODO',
 'QTD_ELEITORES_NO_PERFIL']
 
 
-for filename in os.listdir('dataset/eleitores'):
-  arquivo = (open('dataset/eleitores/' + filename,'r'))
+for filename in os.listdir('../dataset/eleitores'):
+  arquivo = (open('../dataset/eleitores/' + filename,'r'))
 
   reader = csv.DictReader(arquivo,fieldnames=header, delimiter=';')
   for line in reader:
+    line['QTD_ELEITORES_NO_PERFIL'] = int(line['QTD_ELEITORES_NO_PERFIL'])
     collection.insert_one(line)
 
   arquivo.close()
