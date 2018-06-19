@@ -1,11 +1,8 @@
 import os, pandas
-
 from cassandra.cluster import Cluster
 
-cluster = Cluster()
-session = cluster.connect('eleicoes')
-
-header = ['DATA_GERACAO',
+header = [
+'DATA_GERACAO',
 'HORA_GERACAO',
 'ANO_ELEICAO',
 'NUM_TURNO',
@@ -50,13 +47,17 @@ header = ['DATA_GERACAO',
 'DESPESA_MAX_CAMPANHA',
 'COD_SIT_TOT_TURNO',
 'DESC_SIT_TOT_TURNO',
-'NM_EMAIL']
+'NM_EMAIL'
+]
 
-for filename in os.listdir('./dados/candidatos/'):
-    df = pandas.read_csv('./dados/candidatos/{}'.format(filename), sep=';', names=header, encoding='utf-8')
+DIRPATH = './dados/candidatos/'
 
+cluster = Cluster()
+session = cluster.connect('eleicoes')
+
+for filename in os.listdir(DIRPATH):
+    df = pandas.read_csv(os.path.join(DIRPATH, filename), sep=';', names=header, encoding='utf-8')
     for index, row in df.iterrows():
-
         session.execute(
             """
             INSERT INTO candidatos2014(ID, SIGLA_UF, SEQUENCIAL_CANDIDATO, SIGLA_PARTIDO, NOME_PARTIDO, CODIGO_SEXO, DESCRICAO_SEXO, COD_GRAU_INSTRUCAO, DESCRICAO_GRAU_INSTRUCAO, CODIGO_COR_RACA, DESCRICAO_COR_RACA, DESPESA_MAX_CAMPANHA) VALUES (uuid(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
