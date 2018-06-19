@@ -7,7 +7,7 @@ db = client.eleicoes
 collection = db.pibs
 
 header = ['VALOR','MUNICIPIO','ANO']
-arquivo = open('dataset/pib/pib.json','rb')
+arquivo = open('../dataset/pib/pib.json','rb')
 reader = csv.DictReader(arquivo,fieldnames=header,delimiter=',')
 for line in reader:
     if None in line:
