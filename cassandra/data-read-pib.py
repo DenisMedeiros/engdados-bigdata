@@ -1,23 +1,31 @@
-import csv, os
+import os, pandas, json
 from cassandra.cluster import Cluster
+
+header = [
+'VALOR',
+'MUNICIPIO',
+'ANO'
+]
 
 cluster = Cluster()
 session = cluster.connect('eleicoes')
 
-header = ['VALOR','MUNICIPIO','ANO']
-arquivo = open('../pib.csv','r')
-reader = csv.DictReader(arquivo,fieldnames=header,delimiter=',')
-for line in reader:
-    if None in line:
-        del line[None]
- 
+FILEPATH = './dados/pibs/pib-cidades.json.pronto'
+
+with open(FILEPATH, 'r') as f:
+    data = json.load(f)
+
+df = pandas.DataFrame(data['valores'])
+
+for index, row in df.iterrows():
+
     session.execute(
         """
         INSERT INTO pibs (ID, VALOR, MUNICIPIO, ANO)
         VALUES (uuid(), %s, %s, %s)
         """,
-        (int(line['VALOR']), int(line['MUNICIPIO']), int(line['ANO']))
+        (int(row['valor']), int(row['municipio_ibge']), int(row['ano']))
     )
 
-arquivo.close()
 session.shutdown()
+
