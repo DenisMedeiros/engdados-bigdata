@@ -13,7 +13,7 @@ header = [
 'QTD_ELEITORES_NO_PERFIL'
 ]
 
-FILEPATH = './dados/eleitores/perfil_eleitorado_ATUAL.txt.pronto'
+FILEPATH = '../../dados/eleitores/perfil_eleitorado_ATUAL.txt.pronto'
 
 cluster = Cluster()
 session = cluster.connect('eleicoes')

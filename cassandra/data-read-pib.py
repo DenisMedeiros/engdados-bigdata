@@ -10,7 +10,7 @@ header = [
 cluster = Cluster()
 session = cluster.connect('eleicoes')
 
-FILEPATH = './dados/pibs/pib-cidades.json.pronto'
+FILEPATH = '../../dados/pibs/pib-cidades.json.pronto'
 
 with open(FILEPATH, 'r') as f:
     data = json.load(f)

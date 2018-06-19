@@ -34,7 +34,7 @@ header = [
 'LIXO'
 ]
 
-DIRPATH = './dados/resultados/'
+DIRPATH = '../../dados/resultados/'
 
 cluster = Cluster()
 session = cluster.connect('eleicoes')

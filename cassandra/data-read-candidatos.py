@@ -50,7 +50,7 @@ header = [
 'NM_EMAIL'
 ]
 
-DIRPATH = './dados/candidatos/'
+DIRPATH = '../../dados/candidatos/'
 
 cluster = Cluster()
 session = cluster.connect('eleicoes')
