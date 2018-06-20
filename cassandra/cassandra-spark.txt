@@ -1,0 +1,43 @@
+## Python + Cassandra + Spark
+
+https://github.com/datastax/spark-cassandra-connector/blob/master/doc/15_python.md
+
+
+## Executar job no Spark (conector)
+
+spark-submit -deploy-mode client --conf spark.cassandra.connection.host=127.0.0.1 --packages com.datastax.spark:spark-cassandra-connector_2.11:2.3.0 programa.py
+
+spark-submit -deploy-mode client --conf spark.cassandra.connection.host=127.0.0.1 --packages com.datastax.spark:spark-cassandra-connector_2.11:2.3.0 programa.py
+
+pyspark --py-files ~/v0.9.0.zip --packages anguenot/pyspark-cassandra:0.9.0 --conf spark.cassandra.connection.host=localhost
+
+
+## Leitura de dados como RDD
+
+spark.read\
+    .format("org.apache.spark.sql.cassandra")\
+    .options(table="kv", keyspace="test")\
+    .load().show()
+
+## Escrevendo um DataFrame no Cassandra
+
+df.write\
+    .format("org.apache.spark.sql.cassandra")\
+    .mode('append')\
+    .options(table="kv", keyspace="test")\
+    .save()
+
+# Mais material de apoio
+
+Instalação: https://opencredo.com/deploy-spark-apache-cassandra/
+
+Uso: https://opencredo.com/data-analytics-using-cassandra-and-spark/
+
+
+# PySpark Cassandra
+
+https://github.com/anguenot/pyspark-cassandra/tree/master/python/pyspark_cassandra
+
+https://github.com/TargetHolding/pyspark-cassandra
+
+

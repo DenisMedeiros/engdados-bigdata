@@ -15,7 +15,7 @@ header = [
 
 FILEPATH = '../../dados/eleitores/perfil_eleitorado_ATUAL.txt.pronto'
 
-cluster = Cluster()
+cluster = Cluster(['10.7.40.94', '10.7.40.117'])
 session = cluster.connect('eleicoes')
 
 df = pandas.read_csv(FILEPATH, sep=';', names=header, encoding='utf-8')

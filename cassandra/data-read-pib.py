@@ -7,7 +7,7 @@ header = [
 'ANO'
 ]
 
-cluster = Cluster()
+cluster = Cluster(['10.7.40.94', '10.7.40.117'])
 session = cluster.connect('eleicoes')
 
 FILEPATH = '../../dados/pibs/pib-cidades.json.pronto'

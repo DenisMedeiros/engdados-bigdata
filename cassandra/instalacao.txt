@@ -1,7 +1,37 @@
-https://www.rosehosting.com/blog/how-to-install-apache-cassandra-on-ubuntu-16-04/
+Referência oficial
+
+Cassandra: https://docs.datastax.com/en/cassandra/2.1/cassandra/architecture/architectureIntro_c.html
+
+Conenctor Spark e Cassandra: https://github.com/datastax/spark-cassandra-connector
+
+Biblioteca Python Spark Cassandra: https://github.com/anguenot/pyspark-cassandra/
 
 ---
 
-Dependências do módulo python do Cassandra
+Passo 1
+
+Instalação do Cassandra nos nós
+
+https://www.rosehosting.com/blog/how-to-install-apache-cassandra-on-ubuntu-16-04/
+
+Configuração do Cluster
+
+https://www.digitalocean.com/community/tutorials/how-to-run-a-multi-node-cluster-database-with-cassandra-on-ubuntu-14-04
+
+https://www.digitalocean.com/community/tutorials/how-to-configure-a-multi-node-cluster-with-cassandra-on-a-ubuntu-vps
+
+Passo 2 
+
+Instalação dos módulos Python e drivers
 
 sudo apt-get install libev4 libev-dev
+
+pip install cassandra-driver
+
+Passo 3
+
+Importação dos dados usando os scripts.
+
+Passo 4
+
+Integração do Spark é feita automaticamente, pois ele já baixa as dependências.

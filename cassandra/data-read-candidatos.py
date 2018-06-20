@@ -52,7 +52,7 @@ header = [
 
 DIRPATH = '../../dados/candidatos/'
 
-cluster = Cluster()
+cluster = Cluster(['10.7.40.94', '10.7.40.117'])
 session = cluster.connect('eleicoes')
 
 for filename in os.listdir(DIRPATH):
