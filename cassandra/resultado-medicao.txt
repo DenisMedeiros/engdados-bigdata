@@ -1,2 +1,4 @@
 Tempo total do comando 'python data-read-pib.py': 112209 ms.
 Tempo total do comando 'python data-read-candidatos.py': 52040 ms.
+Tempo total do comando 'python data-read-eleitores.py': 1239716 ms.
+Tempo total do comando 'python data-read-resultados.py': 12302156 ms.
