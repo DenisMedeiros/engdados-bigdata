@@ -11,6 +11,14 @@ spark-submit -deploy-mode client --conf spark.cassandra.connection.host=127.0.0.
 
 pyspark --py-files ~/v0.9.0.zip --packages anguenot/pyspark-cassandra:0.9.0 --conf spark.cassandra.connection.host=localhost
 
+pyspark --packages anguenot/pyspark-cassandra:0.9.0 --conf spark.cassandra.connection.host=10.7.40.94
+
+pyspark --packages com.datastax.spark:spark-cassandra-connector_2.11:2.3.0 --conf spark.cassandra.connection.host=10.7.40.94
+
+Final:
+
+spark-submit --deploy-mode client --conf spark.cassandra.connection.host=10.7.40.94 --packages anguenot/pyspark-cassandra:0.9.0 pergunta1.py
+
 
 ## Leitura de dados como RDD
 

@@ -1,0 +1,22 @@
+SEXO = {
+    2: 'Masculino', 
+    4: 'Feminino'
+}
+
+ESCOLARIDADE = {
+    2: 'Lê e Escreve',
+    3: 'Ensino Fundamental Incompleto',
+    4: 'Ensino Fundamental Completo',
+    5: 'Ensino Médio Incompleto',
+    6: 'Ensino Médio Completo',
+    7: 'Superior Incompleto',
+    8: 'Superior Completo',
+}
+
+ETNIA = {
+    1: 'Branca',
+    2: 'Preta',
+    3: 'Parda',
+    4: 'Amarela',
+    5: 'Indígena',
+}

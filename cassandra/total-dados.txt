@@ -1,0 +1,4 @@
+Candidatos: 26259
+Eleitores: 843523
+PIBS: 72205
+Resultados: 7902965
