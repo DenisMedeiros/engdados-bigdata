@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from pyspark.sql import SparkSession
 
 # Cria a sessão.
@@ -26,10 +29,10 @@ informacoes = candidatosDF.select('sequencial_candidato', 'codigo_sexo', 'cod_gr
 dados = codigos.join(informacoes, codigos['sq_candidato'] == informacoes['sequencial_candidato'], 'inner')
 
 # Obtém as respostas desejadas (conta as entradas para cada coluna).
-res_sexo = dados.groupby(['codigo_sexo']).count().collect()
-res_grau_instrucao = dados.groupby(['cod_grau_instrucao']).count().collect()
-res_cor = dados.groupby(['cor']).count().collect()
-res_despesa = dados.groupby(['despesa_max_campanha']).count().collect()
+res_sexo = dados.groupby(['codigo_sexo']).count()
+res_grau_instrucao = dados.groupby(['cod_grau_instrucao']).count()
+res_cor = dados.groupby(['codigo_cor_raca']).count()
+res_despesa = dados.groupby(['despesa_max_campanha']).count()
 
 # Armazena o resultado no HDFS.
 res_sexo.write.format("csv").save("hdfs://dricardo-master:9000/user/engdados/res_sexo.csv")
