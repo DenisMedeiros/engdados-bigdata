@@ -2,7 +2,7 @@
 
 # Comando a ser executado
 
-COMMAND="python data-read-eleitores.py"
+COMMAND="python data-read-resultados.py"
 
 # Mede o tempo de execução em milissegundos.
 
