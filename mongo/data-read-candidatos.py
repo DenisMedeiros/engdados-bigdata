@@ -10,7 +10,7 @@ collection = db.candidatos2014
 header = ['APAGAR',
 'APAGAR',
 'APAGAR',
-'APAGAR',,
+'APAGAR',
 'APAGAR',
 'SIGLA_UF',
 'APAGAR',
