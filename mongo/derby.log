@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Thu Jun 21 02:30:08 BRT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0164-20d2-41c5-000000a602d8 
+on database directory /home/engdados/engdados-bigdata/mongo/metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@7d51ba89 
+Loaded from file:/usr/local/lib/python3.5/dist-packages/pyspark/jars/derby-10.12.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_162-8u162-b12-0ubuntu0.16.04.2-b12
+user.dir=/home/engdados/engdados-bigdata/mongo
+os.name=Linux
+os.arch=amd64
+os.version=4.4.0-79-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
