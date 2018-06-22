@@ -4,13 +4,10 @@ from pyspark.sql import SparkSession as spark
 spark.builder.config('spark.jars.packages','org.mongodb.spark:mongo-spark-connector_2.11:2.2.0' ).getOrCreate()
 
 
-#-------------------------------------------------------------------------
-#COMANDOS PARA RODAR NA SHELL DO PYSPARK
-
 #conexão com a collection de candidatos
 spark_candidatos = spark \
     .builder \
-    .appName("myApp") \
+    .appName("candidatosApp") \
     .config("spark.mongodb.input.uri", "mongodb://10.7.40.54/eleicoes.candidatos2014") \
     .config("spark.mongodb.output.uri", "mongodb://10.7.40.54/eleicoes.candidatos2014") \
     .getOrCreate()
@@ -20,7 +17,7 @@ df_candidatos = spark_candidatos.read.format("com.mongodb.spark.sql.DefaultSourc
 #conexão com a collection de resultados
 spark_resultados = spark \
     .builder \
-    .appName("myApp") \
+    .appName("resultadosApp) \
     .config("spark.mongodb.input.uri", "mongodb://10.7.40.54/eleicoes.resultados2014") \
     .config("spark.mongodb.output.uri", "mongodb://10.7.40.54/eleicoes.resultados2014") \
     .getOrCreate()

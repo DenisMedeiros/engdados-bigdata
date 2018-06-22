@@ -6,12 +6,22 @@ client = MongoClient('10.7.40.54',27017)
 db = client.eleicoes
 collection = db.pibs
 
-header = ['VALOR','MUNICIPIO','ANO']
-arquivo = open('../dataset/pib/pib.json','rb')
+header = [
+'UF',
+'CIDADE',
+'PIB',
+'POPULACAO',
+'PIB_PERCAPITA',
+'COD_TSE'
+]
+arquivo = open('../dataset/pib/pibs-final.csv,'rb')
 reader = csv.DictReader(arquivo,fieldnames=header,delimiter=',')
 for line in reader:
     if None in line:
         del line[None]
-    line['VALOR'] = int(line['VALOR'])
+    line['PIB'] = float(line['PIB'])
+    line['PIB_PERCAPITA'] = float(line['PIB_PERCAPITA'])
+    line['POPULACAO'] = int(line['POPULACAO'])
+    line['COD_TSE'] = int('COD_TSE')
     collection.insert_one(line)
 arquivo.close()
