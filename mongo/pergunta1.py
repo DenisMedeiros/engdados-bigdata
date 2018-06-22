@@ -50,4 +50,4 @@ res_grau_instrucao.write.format("csv").save("hdfs://mcruz-master:9000/user/engda
 res_cor.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/res_cor")
 res_despesa.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/res_despesa")
 
-print 'Encerrado com sucesso.'
+print('Encerrado com sucesso')
