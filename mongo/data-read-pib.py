@@ -14,7 +14,7 @@ header = [
 'PIB_PERCAPITA',
 'COD_TSE'
 ]
-arquivo = open('../dataset/pib/pibs-final.csv,'rb')
+arquivo = open('../dataset/pib/pibs-final.csv','rb')
 reader = csv.DictReader(arquivo,fieldnames=header,delimiter=',')
 for line in reader:
     if None in line:
@@ -22,6 +22,5 @@ for line in reader:
     line['PIB'] = float(line['PIB'])
     line['PIB_PERCAPITA'] = float(line['PIB_PERCAPITA'])
     line['POPULACAO'] = int(line['POPULACAO'])
-    line['COD_TSE'] = int('COD_TSE')
     collection.insert_one(line)
 arquivo.close()
