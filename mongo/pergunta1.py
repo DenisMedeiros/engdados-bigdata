@@ -51,6 +51,3 @@ res_cor.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/res_cor
 res_despesa.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/res_despesa")
 
 print 'Encerrado com sucesso.'
-
-
-spark-submit --deploy-mode client --conf spark.cassandra.connection.host=10.7.40.94 --packages org.mongodb.spark:mongo-spark-connector_2.11:2.2.0 pergunta1.py
