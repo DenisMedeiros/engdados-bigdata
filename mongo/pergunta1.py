@@ -27,19 +27,27 @@ spark_resultados = spark \
 df_candidatos = spark_candidatos.read.format("com.mongodb.spark.sql.DefaultSource").load()
 df_resultados = spark_resultados.read.format("com.mongodb.spark.sql.DefaultSource").load()
 
+#filtragem dos candidatos eleitos
+df_eleitos = df_resultados.filter(df_resultados['codigo_sit_cand_tot'] < 4).\
+select('sq_candidato').\
+distinct()
 
-rdd_candidatos = df_candidatos.rdd
-rdd_resultados = df_resultados.rdd
+#seleciona informações úteis
+df_informacoes = df_candidatos.select('sequencial_candidato', 'codigo_sexo', 'cod_grau_instrucao', 'codigo_cor_raca', 'despesa_max_campanha')
 
+# Faz o join dos eleitos e das informações.
+dados = df_eleitos.join(df_informacoes, df_eleitos['sq_candidato'] == df_informacoes['sequencial_candidato'], 'inner')
 
-#cria tabela temporaria com os dados
-df_candidatos.createOrReplaceTempView("temp_candidatos")
-df_resultados.createOrReplaceTempView("temp_resultados")
+# Obtém as respostas desejadas (conta as entradas para cada coluna).
+res_sexo = dados.groupby(['codigo_sexo']).count()
+res_grau_instrucao = dados.groupby(['cod_grau_instrucao']).count()
+res_cor = dados.groupby(['codigo_cor_raca']).count()
+res_despesa = dados.groupby(['despesa_max_campanha']).count()
 
-query = spark.sql("SELECT tc.SIGLA_UF, SEQUENCIAL_CANDIDATO ,DESCRICAO_COR_RACA, DESCRICAO_SEXO, DESCRICAO_GRAU_INSTRUCAO, DESPESA_MAX_CAMPANHA, TOTAL_VOTOS FROM temp_candidatos as tc \
-INNER JOIN temp_resultados AS tr ON tc.SEQUENCIAL_CANDIDATO = tr.SQ_CANDIDATO \
-WHERE tr.DESC_SIT_CAND_TOT = 'ELEITO' \
-ORDER BY TOTAL_VOTOS DESC \
-LIMIT 20")
+# Armazena o resultado no HDFS.
+res_sexo.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/res_sexo.csv")
+res_grau_instrucao.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/res_grau_instrucao.csv")
+res_cor.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/res_cor")
+res_despesa.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/res_despesa")
 
-query.show()
+print 'Encerrado com sucesso.'
