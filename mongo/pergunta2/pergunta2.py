@@ -16,7 +16,7 @@ spark_eleicoes = spark \
 
 
 # Gera um DataFrame com os resultados da eleição de 2014.
-eleicoesDF = spark_eleitores.read.format("com.mongodb.spark.sql.DefaultSource").load()
+eleicoesDF = spark_eleicoes.read.format("com.mongodb.spark.sql.DefaultSource").load()
 
 
 # Obtém o código dos candidatos eleitos e suas cidades.
@@ -25,22 +25,33 @@ codigos = eleicoesDF.\
     select('sq_candidato', 'codigo_municipio').\
     distinct()
 
+spark_candidatos= spark \
+    .builder \
+    .appName("candidatosApp") \
+    .config("spark.mongodb.input.uri", "mongodb://10.7.40.54/eleicoes.candidatos2014") \
+    .config("spark.mongodb.output.uri", "mongodb://10.7.40.54/eleicoes.candidatos2014") \
+    .getOrCreate()
+
 # Gera um DataFrame com os dados dos candidatos.
-candidatosDF = spark.read.format("org.apache.spark.sql.cassandra").\
-    options(keyspace="eleicoes", table="candidatos2014").\
-    load()
+candidatosDF = spark_candidatos.read.format("com.mongodb.spark.sql.DefaultSource").load()
 
 # Obtém apenas as informações úteis.
 informacoes = candidatosDF.select('sequencial_candidato', 'sigla_partido')
 
+
+spark_pibs = spark \
+    .builder \
+    .appName("pibsApp") \
+    .config("spark.mongodb.input.uri", "mongodb://10.7.40.54/eleicoes.pibs") \
+    .config("spark.mongodb.output.uri", "mongodb://10.7.40.54/eleicoes.pibs") \
+    .getOrCreate()
+
 # Gera um DataFrame com os dados dos pibs.
-pibsDF = spark.read.format("org.apache.spark.sql.cassandra").\
-    options(keyspace="eleicoes", table="pibs").\
-    load()
+pibsDF = spark_pibs.read.format("com.mongodb.spark.sql.DefaultSource").load()
 
 # Obtém os PIBS de acima de R$ 70.000,00;
 pibs = pibsDF.\
-    filter(pibsDF['pib_percapita'] > 700000.0).\
+    filter(pibsDF['pib_percapita'] > 70000.0).\
     select('uf', 'cidade', 'cod_tse')
 
 # Faz o join dos eleitos e das informações (partido).
@@ -53,6 +64,6 @@ final = dados_eleitos.join(pibs, dados_eleitos['codigo_municipio'] == pibs['cod_
 res_partidos = final.groupby(['sigla_partido']).count()
 
 # Armazena o resultado no HDFS.
-res_partidos.write.format("csv").save("hdfs://dricardo-master:9000/user/engdados/res_partidos.csv")
+res_partidos.write.format("csv").save("hdfs://mtargino-master:9000/user/engdados/pergunta2/res_partidos.csv")
 
 print 'Encerrado com sucesso.'
