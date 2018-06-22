@@ -18,4 +18,4 @@ CREATE TABLE eleicoes.eleitores(ID UUID PRIMARY KEY, UF text, MUNICIPIO text, CO
 
 # Tabela pibs2014
 
-CREATE TABLE eleicoes.pibs(ID UUID PRIMARY KEY, VALOR varint, MUNICIPIO int, ANO int);
+CREATE TABLE eleicoes.pibs(ID UUID PRIMARY KEY, UF text, CIDADE text, PIB double, POPULACAO int, PIB_PERCAPITA double, COD_TSE int);
