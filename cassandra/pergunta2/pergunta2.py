@@ -32,7 +32,7 @@ pibsDF = spark.read.format("org.apache.spark.sql.cassandra").\
 
 # Obtém os PIBS de acima de R$ 70.000,00;
 pibs = pibsDF.\
-    filter(pibsDF['pib_percapita'] > 700000.0).\
+    filter(pibsDF['pib_percapita'] > 70000.0).\
     select('uf', 'cidade', 'cod_tse')
 
 # Faz o join dos eleitos e das informações (partido).
