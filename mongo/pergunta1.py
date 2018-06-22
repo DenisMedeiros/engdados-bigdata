@@ -15,6 +15,8 @@ spark_candidatos = spark \
     .config("spark.mongodb.output.uri", "mongodb://10.7.40.54/eleicoes.candidatos2014") \
     .getOrCreate()
 
+df_candidatos = spark_candidatos.read.format("com.mongodb.spark.sql.DefaultSource").load()
+
 #conexão com a collection de resultados
 spark_resultados = spark \
     .builder \
@@ -23,8 +25,7 @@ spark_resultados = spark \
     .config("spark.mongodb.output.uri", "mongodb://10.7.40.54/eleicoes.resultados2014") \
     .getOrCreate()
 
-#leitura dos dados dos candidatos
-df_candidatos = spark_candidatos.read.format("com.mongodb.spark.sql.DefaultSource").load()
+
 df_resultados = spark_resultados.read.format("com.mongodb.spark.sql.DefaultSource").load()
 
 #filtragem dos candidatos eleitos
