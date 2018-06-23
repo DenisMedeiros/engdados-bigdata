@@ -17,7 +17,7 @@ df_candidatos = spark_candidatos.read.format("com.mongodb.spark.sql.DefaultSourc
 #conexão com a collection de resultados
 spark_resultados = spark \
     .builder \
-    .appName("resultadosApp) \
+    .appName("resultadosApp") \
     .config("spark.mongodb.input.uri", "mongodb://10.7.40.54/eleicoes.resultados2014") \
     .config("spark.mongodb.output.uri", "mongodb://10.7.40.54/eleicoes.resultados2014") \
     .getOrCreate()
