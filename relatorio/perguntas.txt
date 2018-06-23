@@ -7,8 +7,7 @@
 - Quais partidos elegeram mais candidatos em cidades com PIB acima de X e PIB abaixo de Y?
 
 3) Escolaridade do eleitorado
-
-- Quais partidos mais elegeram candidatos em cidades com alto percentual de pessoas com ensino superior completo e em cidades com alto percentual de pessoas com baixa escolaridade?
+- Quais partidos receberam mais votos em cidades que pelo menos 15% dos eleitores possuem baixa escolaridade
 
 4) Faixa etária do eleitorado
 

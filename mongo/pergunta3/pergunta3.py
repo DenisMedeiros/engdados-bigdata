@@ -20,23 +20,20 @@ df_informacoes_eleitores = df_eleitores.select('cod_municipio_tse', 'grau_de_esc
 #obtém total de eleitores
 total_eleitores = df_eleitores.groupby(['cod_municipio_tse']).sum('qtd_eleitores_no_perfil').withColumnRenamed('sum(qtd_eleitores_no_perfil)', 'total')
 
-#obtém eleitores com superior completo e baixa escolaridade
-df_eleitores_superior_completo = df_informacoes_eleitores.filter(df_informacoes_eleitores['grau_de_escolaridade'] == 'SUPERIOR COMPLETO')
+#obtém eleitores baixa escolaridade
 df_eleitores_baixa_esc = df_informacoes_eleitores.filter((df_informacoes_eleitores['grau_de_escolaridade'] == 'ANALFABETO' )| \
  (df_informacoes_eleitores['grau_de_escolaridade'] == 'LÊ E ESCREVE') | \
  (df_informacoes_eleitores['grau_de_escolaridade'] == 'ENSINO FUNDAMENTAL INCOMPLETO'))
 
-#obtém número total de eleitores por municipio para cada categoria
-total_superior = df_eleitores_superior_completo.groupby('cod_municipio_tse').sum('qtd_eleitores_no_perfil').withColumnRenamed('sum(qtd_eleitores_no_perfil)', 'total_sup')
+#obtém número total de eleitores com baixa escolaridade por municipio
 total_baixa_esc = df_eleitores_baixa_esc.groupby('cod_municipio_tse').sum('qtd_eleitores_no_perfil').withColumnRenamed('sum(qtd_eleitores_no_perfil)', 'total_baixa_esc')
 
-total_rel = total_eleitores.join(total_superior,['cod_municipio_tse'],'inner')
-total_rel = total_rel.join(total_baixa_esc,['cod_municipio_tse'],'inner')
+total_rel = total_eleitores.join(total_baixa_esc,['cod_municipio_tse'],'inner')
 
 #valor relativo para cada categoria
-rel = total_rel.withColumn('sup_rel',total_rel['total_sup']/total_rel['total'])
-rel = rel.withColumn('baixa_rel',total_rel['total_baixa_esc']/total_rel['total'])
+rel_b = total_rel.withColumn('baixa_rel',total_rel['total_baixa_esc']/total_rel['total'])
 
+rel = rel_b.filter(rel_b['baixa_rel'] > 0.5)
 
 #------------------------------------------
 #RESULTADOS
@@ -81,10 +78,9 @@ df_geral = df_partido_municipio.join(rel,rel['cod_municipio_tse']== df_partido_m
 #------------------------------------------
 #RESPOSTAS
 # Calcula a resposta (valores percentuais dos eleitores).
-res_sup = df_geral.select('nome_municipio','sigla_partido','total_votos','sup_rel').orderBy('sup_rel','total_votos', ascending=False).dropDuplicates(['nome_municipio'])
-res_baixa_esc = df_geral.select('nome_municipio','sigla_partido','total_votos','sup_rel').orderBy('baixa_rel','total_votos', ascending=False).dropDuplicates(['nome_municipio'])
+df_baixa_esc = df_geral.select('sigla_partido','total_votos').groupby('sigla_partido').sum('total_votos').withColumnRenamed('sum(total_votos)', 'total_votos').orderBy('total_votos', ascending=False)
 
+res_baixa = df_baixa_esc.orderBy('baixa_rel','total_votos', ascending=False)
 # Armazena o resultado no HDFS.
-res_sup.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta3/res_sup.csv")
 res_baixa_esc.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta3/res_baixa_esc.csv")
 print('Encerrado com sucesso')
