@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Fri Jun 22 01:47:14 BRT 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0164-25d1-57c6-000000d1dea0 
-on database directory /home/engdados/engdados-bigdata/metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@31e151cf 
+Sat Jun 23 18:48:20 BRT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0164-2e9e-8eb3-0000007bef18 
+on database directory /home/engdados/engdados-bigdata/metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@1e9343b 
 Loaded from file:/home/engdados/hadoop/spark/jars/derby-10.12.1.1.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_171-8u171-b11-0ubuntu0.16.04.1-b11
