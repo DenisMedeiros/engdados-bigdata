@@ -80,7 +80,6 @@ df_geral = df_partido_municipio.join(rel,rel['cod_municipio_tse']== df_partido_m
 # Calcula a resposta (valores percentuais dos eleitores).
 df_baixa_esc = df_geral.select('sigla_partido','total_votos').groupby('sigla_partido').sum('total_votos').withColumnRenamed('sum(total_votos)', 'total_votos').orderBy('total_votos', ascending=False)
 
-res_baixa = df_baixa_esc.orderBy('baixa_rel','total_votos', ascending=False)
 # Armazena o resultado no HDFS.
-res_baixa_esc.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta3/res_baixa_esc.csv")
+df_baixa_esc.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta3/res_baixa_esc.csv")
 print('Encerrado com sucesso')
