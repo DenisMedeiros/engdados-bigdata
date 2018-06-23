@@ -3,33 +3,75 @@
 
 from pyspark.sql import SparkSession
 
+#conexão com a collection
 # Cria a sessão.
-spark = SparkSession.builder.appName("Pergunta4").getOrCreate()
+spark = SparkSession.builder.appName("Pergunta2").getOrCreate()
 
-# Gera um DataFrame com os dados dos eleitores.
-eleitoresDF = spark.read.format("org.apache.spark.sql.cassandra").\
+
+df_eleitores = spark.read.format("org.apache.spark.sql.cassandra").\
     options(keyspace="eleicoes", table="eleitores").\
     load()
 
-# Obtém apenas as informações úteis dos eleitores.
-informacoes = eleitoresDF.select('uf', 'faixa_etaria', 'grau_de_escolaridade', 'qtd_eleitores_no_perfil')
+#seleciona informações úteis
+df_informacoes_eleitores = df_eleitores.select('cod_municipio_tse', 'grau_de_escolaridade', 'qtd_eleitores_no_perfil')
 
-# Total eleitores por estado.
-total_eleitores = eleitoresDF.groupby(['uf']).count().withColumnRenamed('count', 'total')
+#obtém total de eleitores
+total_eleitores = df_eleitores.groupby(['cod_municipio_tse']).sum('qtd_eleitores_no_perfil').withColumnRenamed('sum(qtd_eleitores_no_perfil)', 'total')
 
-# Filtra os candidatos nas faixas etárias opcionais.
-opcionais = informacoes.filter((informacoes['faixa_etaria'] == '16 ANOS') | (informacoes['faixa_etaria'] == '17 ANOS') | (informacoes['faixa_etaria'] == '70 A 79 ANOS') | (informacoes['faixa_etaria'] == '17 ANOS') | (informacoes['faixa_etaria'] == 'SUPERIOR A 79 ANOS') | (informacoes['grau_de_escolaridade'] == 'ANALFABETO'))
+#obtém eleitores baixa escolaridade
+df_eleitores_baixa_esc = df_informacoes_eleitores.filter((df_informacoes_eleitores['grau_de_escolaridade'] == 'ANALFABETO' )| \
+ (df_informacoes_eleitores['grau_de_escolaridade'] == 'LÊ E ESCREVE') | \
+ (df_informacoes_eleitores['grau_de_escolaridade'] == 'ENSINO FUNDAMENTAL INCOMPLETO'))
 
-# Obtém as respostas desejadas (conta as entradas para cada coluna).
-total_opcionais = opcionais.groupby(['uf']).count()
+#obtém número total de eleitores com baixa escolaridade por municipio
+total_baixa_esc = df_eleitores_baixa_esc.groupby('cod_municipio_tse').sum('qtd_eleitores_no_perfil').withColumnRenamed('sum(qtd_eleitores_no_perfil)', 'total_baixa_esc')
 
-# Encontra o valor relativo de eleitores.
-final = total_eleitores.join(total_opcionais, ['uf'], 'inner')
+total_rel = total_eleitores.join(total_baixa_esc,['cod_municipio_tse'],'inner')
 
+#valor relativo para cada categoria
+rel_b = total_rel.withColumn('baixa_rel',total_rel['total_baixa_esc']/total_rel['total'])
+
+rel = rel_b.filter(rel_b['baixa_rel'] > 0.5)
+
+#------------------------------------------
+#RESULTADOS
+#conexão com a collection
+df_resultados = spark.read.format("org.apache.spark.sql.cassandra").\
+    options(keyspace="eleicoes", table="resultados2014").\
+    load()
+
+#seleciona informações úteis
+df_informacoes_resultados = df_resultados.select('codigo_municipio','nome_municipio','sq_candidato','total_votos')
+
+#------------------------------------------
+#CANDIDATOS
+spark.read.format("org.apache.spark.sql.cassandra").\
+    options(keyspace="eleicoes", table="candidatos2014").\
+    load()
+
+df_candidatos = spark.read.format("org.apache.spark.sql.cassandra").\
+    options(keyspace="eleicoes", table="candidatos2014").\
+    load()
+
+#seleciona informações úteis
+df_informacoes_candidatos = df_candidatos.select('sequencial_candidato','sigla_partido','nome_partido')
+
+#juncao das tabelas de resultados e candidatos
+df_res_can = df_informacoes_resultados.join(df_informacoes_candidatos, \
+df_informacoes_resultados['sq_candidato']==df_informacoes_candidatos['sequencial_candidato'],\
+'inner')
+#partido mais votado de cada municipio
+df_partido_municipio = df_res_can.groupBy('nome_municipio','codigo_municipio','sigla_partido').sum('total_votos').withColumnRenamed('sum(total_votos)', 'total_votos').orderBy('total_votos',ascending=False)
+
+#obtém tabela geral com todas as informações necessárias
+df_geral = df_partido_municipio.join(rel,rel['cod_municipio_tse']== df_partido_municipio['codigo_municipio'],'inner')
+
+#------------------------------------------
+#RESPOSTAS
 # Calcula a resposta (valores percentuais dos eleitores).
-res_eleitores = final.withColumn("relativo", final["count"] / final["total"])
+df_baixa_esc = df_geral.select('sigla_partido','total_votos').groupby('sigla_partido').sum('total_votos').withColumnRenamed('sum(total_votos)', 'total_votos').orderBy('total_votos', ascending=False)
 
+res_baixa = df_baixa_esc.orderBy('baixa_rel','total_votos', ascending=False)
 # Armazena o resultado no HDFS.
-res_eleitores.write.format("csv").save("hdfs://dricardo-master:9000/user/engdados/res_eleitores.csv")
-
-print 'Encerrado com sucesso.'
+res_baixa_esc.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta3/res_baixa_esc.csv")
+print('Encerrado com sucesso')
