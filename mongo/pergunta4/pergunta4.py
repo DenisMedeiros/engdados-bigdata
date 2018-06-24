@@ -29,7 +29,7 @@ df_eleitores_facultativos = df_informacoes.filter((df_informacoes['faixa_etaria'
 total_facultativos = df_eleitores_facultativos.groupby(['uf']).count()
 
 # Encontra o valor relativo de eleitores.
-final = total_eleitores.join(total_opcionais, ['uf'], 'inner')
+final = total_eleitores.join(total_facultativos, ['uf'], 'inner')
 
 # Calcula a resposta (valores percentuais dos eleitores).
 res_eleitores = final.withColumn("relativo", final["count"] / final["total"])
