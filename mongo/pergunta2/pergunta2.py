@@ -64,6 +64,6 @@ final = dados_eleitos.join(pibs, dados_eleitos['codigo_municipio'] == pibs['cod_
 res_partidos = final.groupby(['sigla_partido']).count()
 
 # Armazena o resultado no HDFS.
-res_partidos.write.format("csv").save("hdfs://mtargino-master:9000/user/engdados/pergunta2/res_partidos.csv")
+res_partidos.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta2/res_partidos.csv")
 
-print 'Encerrado com sucesso.'
+print('Encerrado com sucesso.')

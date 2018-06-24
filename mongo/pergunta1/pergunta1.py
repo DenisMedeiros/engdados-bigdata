@@ -43,8 +43,8 @@ res_cor = dados.groupby(['codigo_cor_raca']).count()
 res_despesa = dados.groupby(['despesa_max_campanha']).count()
 
 # Armazena o resultado no HDFS.
-res_sexo.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta1/res_sexo.csv")
-res_grau_instrucao.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta1/res_grau_instrucao.csv")
+res_sexo.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta1/res_sexo")
+res_grau_instrucao.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta1/res_grau_instrucao")
 res_cor.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta1/res_cor")
 res_despesa.write.format("csv").save("hdfs://mcruz-master:9000/user/engdados/pergunta1/res_despesa")
 
