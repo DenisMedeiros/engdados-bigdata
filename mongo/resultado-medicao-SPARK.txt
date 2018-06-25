@@ -1,0 +1,4 @@
+Tempo total do comando 'spark-submit --deploy-mode client --packages org.mongodb.spark:mongo-spark-connector_2.11:2.2.0 pergunta1/pergunta1.py': 634439 ms.
+Tempo total do comando 'spark-submit --deploy-mode client --packages org.mongodb.spark:mongo-spark-connector_2.11:2.2.0 pergunta2/pergunta2.py': 248686 ms.
+Tempo total do comando 'spark-submit --deploy-mode client --packages org.mongodb.spark:mongo-spark-connector_2.11:2.2.0 pergunta3/pergunta3.py': 349853 ms.
+Tempo total do comando 'spark-submit --deploy-mode client --packages org.mongodb.spark:mongo-spark-connector_2.11:2.2.0 pergunta4/pergunta4.py': 75327 ms.
